@@ -84,9 +84,9 @@ void binary_op(
     }
 
     // Launch up to 3D grid of threads
-    int dim0 = ndim > 0 ? shape[ndim - 1] : 1;
-    int dim1 = ndim > 1 ? shape[ndim - 2] : 1;
-    int rest = out.size() / (dim0 * dim1);
+    size_t dim0 = ndim > 0 ? shape[ndim - 1] : 1;
+    size_t dim1 = ndim > 1 ? shape[ndim - 2] : 1;
+    size_t rest = out.size() / (dim0 * dim1);
     NS::UInteger thread_group_size = kernel->maxTotalThreadsPerThreadgroup();
     if (thread_group_size != 1024) {
       throw std::runtime_error("[Metal::binary] Must use 1024 sized block");
@@ -448,6 +448,14 @@ void Maximum::eval_gpu(const std::vector<array>& inputs, array& out) {
 
 void Minimum::eval_gpu(const std::vector<array>& inputs, array& out) {
   binary_op(inputs, out, "min");
+}
+
+void Floor::eval_gpu(const std::vector<array>& inputs, array& out) {
+  unary_op(inputs, out, "floor");
+}
+
+void Ceil::eval_gpu(const std::vector<array>& inputs, array& out) {
+  unary_op(inputs, out, "ceil");
 }
 
 void Multiply::eval_gpu(const std::vector<array>& inputs, array& out) {

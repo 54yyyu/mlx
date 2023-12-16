@@ -87,6 +87,37 @@ inline array ones(const std::vector<int>& shape, StreamOrDevice s = {}) {
 }
 array ones_like(const array& a, StreamOrDevice s = {});
 
+/** Fill an array of the given shape (n,m) with ones in the specified diagonal
+ * k, and zeros everywhere else. */
+array eye(int n, int m, int k, Dtype dtype, StreamOrDevice s = {});
+inline array eye(int n, Dtype dtype, StreamOrDevice s = {}) {
+  return eye(n, n, 0, dtype, s);
+}
+inline array eye(int n, int m, StreamOrDevice s = {}) {
+  return eye(n, m, 0, float32, s);
+}
+inline array eye(int n, int m, int k, StreamOrDevice s = {}) {
+  return eye(n, m, k, float32, s);
+}
+inline array eye(int n, StreamOrDevice s = {}) {
+  return eye(n, n, 0, float32, s);
+}
+
+/** Create a square matrix of shape (n,n) of zeros, and ones in the major
+ * diagonal. */
+array identity(int n, Dtype dtype, StreamOrDevice s = {});
+inline array identity(int n, StreamOrDevice s = {}) {
+  return identity(n, float32, s);
+}
+
+array tri(int n, int m, int k, Dtype type, StreamOrDevice s = {});
+inline array tri(int n, Dtype type, StreamOrDevice s = {}) {
+  return tri(n, n, 0, type, s);
+}
+
+array tril(array x, int k, StreamOrDevice s = {});
+array triu(array x, int k, StreamOrDevice s = {});
+
 /** array manipulation */
 
 /** Reshape an array to the given shape. */
@@ -151,6 +182,10 @@ array concatenate(
     StreamOrDevice s = {});
 array concatenate(const std::vector<array>& arrays, StreamOrDevice s = {});
 
+/** Stack arrays along a new axis. */
+array stack(const std::vector<array>& arrays, int axis, StreamOrDevice s = {});
+array stack(const std::vector<array>& arrays, StreamOrDevice s = {});
+
 /** Permutes the dimensions according to the given axes. */
 array transpose(const array& a, std::vector<int> axes, StreamOrDevice s = {});
 inline array transpose(
@@ -159,6 +194,16 @@ inline array transpose(
     StreamOrDevice s = {}) {
   return transpose(a, std::vector<int>(axes), s);
 }
+
+/** Swap two axes of an array. */
+array swapaxes(const array& a, int axis1, int axis2, StreamOrDevice s = {});
+
+/** Move an axis of an array. */
+array moveaxis(
+    const array& a,
+    int source,
+    int destination,
+    StreamOrDevice s = {});
 
 /** Pad an array with a constant value */
 array pad(
@@ -653,6 +698,12 @@ array maximum(const array& a, const array& b, StreamOrDevice s = {});
 
 /** Element-wise minimum between two arrays. */
 array minimum(const array& a, const array& b, StreamOrDevice s = {});
+
+/** Floor the element of an array. **/
+array floor(const array& a, StreamOrDevice s = {});
+
+/** Ceil the element of an array. **/
+array ceil(const array& a, StreamOrDevice s = {});
 
 /** Square the elements of an array. */
 array square(const array& a, StreamOrDevice s = {});
